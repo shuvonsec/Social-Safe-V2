@@ -1,4 +1,4 @@
-import type { FieldErrors, Resolver } from "react-hook-form";
+import type { FieldError, FieldErrors, Resolver } from "react-hook-form";
 import type { z } from "zod";
 
 type AnyZodObject = z.ZodTypeAny;
@@ -24,10 +24,11 @@ export function createZodResolver<TSchema extends AnyZodObject>(schema: TSchema)
       const path = issue.path[0];
       if (typeof path !== "string") continue;
       const key = path as keyof z.infer<TSchema>;
-      errors[key] = {
+      const fieldError: FieldError = {
         type: issue.code,
         message: issue.message
       };
+      errors[key] = fieldError;
     }
 
     return {
